@@ -12,5 +12,4 @@ set(CMAKE_EXE_LINKER_FLAGS
     "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Map=${CMAKE_BINARY_DIR}/${PROJECT_NAME}.map"
 )
 
-add_subdirectory(thirdparty)
 add_subdirectory(blinky)

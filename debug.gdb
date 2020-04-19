@@ -1,6 +1,8 @@
+set architecture arm
+set remotetimeout 100000
 
 # connect to the gdbserver
-target remote localhost:3333
+target remote :3333
 
 #enable tui
 tui enable
@@ -12,24 +14,19 @@ set pagination off
 # 2=32 bit, 1=16 bit and 0=8 bit parallelism mode
 #monitor flash set_parallelism_mode 2
 
-# Set character encoding
-# set host-charset CP1252
-# set target-charset CP1252
+set print asm-demangle on
+monitor arm semihosting enable
+
+# Reset the device.
+monitor reset init
+monitor sleep 1000
+monitor halt
+monitor sleep 1000
 
 # Load the program executable
 load
 
-# Reset the chip to get to a known state. Remove "monitor reset" command
-# if the code is not located at default address and does not run by reset.
-monitor reset halt
-
-# Enable Debug connection in low power modes (DBGMCU->CR)
-# set 0xE0042004 = (0xE0042004) | 0x7
-
-# Set a breakpoint at main(). Whenever the breakpoint is hit, the function is called automatially
 break main
-commands
-end
 
 # Run to the breakpoint.
 continue

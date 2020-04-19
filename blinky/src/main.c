@@ -1,42 +1,60 @@
+#include "main.h"
 #include "FreeRTOS.h"
 #include "bluepill.h"
-#include "croutine.h"
 #include "stm32f1xx.h"
 #include "stm32f1xx_hal_conf.h"
 #include "task.h"
+#include <stdio.h>
+extern void initialise_monitor_handles(void);
 
-void SystemClock_Config(void);
-static void Error_Handler(void);
+void vBlinkTask(void *pvParameters) {
 
-void main(void) {
-  GPIO_InitTypeDef gpio;
+  const TickType_t delay = pdMS_TO_TICKS(1000);
 
-  HAL_Init();
+  for (;;) {
+    HAL_GPIO_TogglePin(LED1_GPIO_PORT, LED1_PIN);
+    printf("hello world\n");
+    vTaskDelay(delay);
+  }
+}
+
+void vSemiHostTask(void *pvParameters) {
+
+  const TickType_t delay = pdMS_TO_TICKS(1000);
+
+  for (;;) {
+    printf("hello world\n");
+    vTaskDelay(delay);
+  }
+}
+
+void vApplicationTickHook(void) { HAL_IncTick(); }
+
+int main(void) {
 
   SystemClock_Config();
+  initialise_monitor_handles();
 
-  /* -1- Enable GPIO Clock (to be able to program the configuration registers)
-   */
-  LED1_GPIO_CLK_ENABLE();
-
-  /* -2- Configure IO in output push-pull mode to drive external LEDs */
-  gpio.Mode = GPIO_MODE_OUTPUT_PP;
-  gpio.Pull = GPIO_PULLUP;
-  gpio.Speed = GPIO_SPEED_FREQ_HIGH;
-
-  gpio.Pin = LED1_PIN;
-  HAL_GPIO_Init(LED1_GPIO_PORT, &gpio);
-
-  while (1) {
-    HAL_GPIO_TogglePin(LED1_GPIO_PORT, LED1_PIN);
-    /* Insert delay 100 ms */
-    HAL_Delay(100);
+  {
+    LED1_GPIO_CLK_ENABLE();
+    GPIO_InitTypeDef gpio;
+    gpio.Mode = GPIO_MODE_OUTPUT_PP;
+    gpio.Pull = GPIO_PULLUP;
+    gpio.Speed = GPIO_SPEED_FREQ_HIGH;
+    gpio.Pin = LED1_PIN;
+    HAL_GPIO_Init(LED1_GPIO_PORT, &gpio);
   }
+
+  xTaskCreate(vBlinkTask, "task_blink", 1000, NULL, 1, NULL);
+  xTaskCreate(vSemiHostTask, "task_print", 1000, NULL, 1, NULL);
+  vTaskStartScheduler();
+
+  for (;;)
+    ;
 }
 
 /**
  * @brief  System Clock Configuration
- *         The system Clock is configured as follow :
  *            System Clock source            = PLL (HSE)
  *            SYSCLK(Hz)                     = 72000000
  *            HCLK(Hz)                       = 72000000
@@ -51,8 +69,8 @@ void main(void) {
  * @retval None
  */
 void SystemClock_Config(void) {
-  RCC_ClkInitTypeDef clk = {0};
-  RCC_OscInitTypeDef osc = {0};
+  RCC_ClkInitTypeDef clk;
+  RCC_OscInitTypeDef osc;
 
   /* Enable HSE Oscillator and activate PLL with HSE as source */
   osc.OscillatorType = RCC_OSCILLATORTYPE_HSE;
@@ -61,7 +79,7 @@ void SystemClock_Config(void) {
   osc.PLL.PLLState = RCC_PLL_ON;
   osc.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   osc.PLL.PLLMUL = RCC_PLL_MUL9;
-  assert_param(HAL_RCC_OscConfig(&osc) == HAL_OK);
+  HAL_RCC_OscConfig(&osc);
 
   /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2
      clocks dividers */
@@ -71,23 +89,17 @@ void SystemClock_Config(void) {
   clk.AHBCLKDivider = RCC_SYSCLK_DIV1;
   clk.APB2CLKDivider = RCC_HCLK_DIV1;
   clk.APB1CLKDivider = RCC_HCLK_DIV2;
-  assert_param(HAL_RCC_ClockConfig(&clk, FLASH_LATENCY_2) == HAL_OK);
+  HAL_RCC_ClockConfig(&clk, FLASH_LATENCY_2);
 }
 
-static void Error_Handler(void) {
-
-  while (1) {
-  }
-};
-
-void _exit(void) {
-  while (1)
+void Error_Handler(void) {
+  for (;;)
     ;
-};
+}
 
 #ifdef USE_FULL_ASSERT
 void assert_failed(uint8_t *file, uint32_t line) {
-  while (1) {
-  }
+  for (;;)
+    ;
 }
 #endif
