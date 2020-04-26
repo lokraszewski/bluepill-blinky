@@ -27,27 +27,14 @@ make -j
 ## Debug 
 Fir start the debugger, in our case we're using OpenOCD:
 ```shell
-% openocd --file openocd-stm32f103.cfg -c 'init'
+% make debug_server
+Scanning dependencies of target debug_server
 Open On-Chip Debugger 0.10.0
 Licensed under GNU GPL v2
-For bug reports, read
-        http://openocd.org/doc/doxygen/bugs.html
-Info : The selected transport took over low-level target control. The results might differ compared to plain JTAG/SWD
-adapter speed: 1000 kHz
-adapter_nsrst_delay: 100
-none separate
-none separate
-Info : Unable to match requested speed 1000 kHz, using 950 kHz
-Info : Unable to match requested speed 1000 kHz, using 950 kHz
-Info : clock speed 950 kHz
-Info : STLINK v2 JTAG v33 API v2 SWIM v7 VID 0x0483 PID 0x3748
-Info : using stlink api v2
-Info : Target voltage: 6.424179
-Info : stm32f1x.cpu: hardware has 6 breakpoints, 4 watchpoints
 ```
 From the build directory we can now load our firmware and run it:
 ```shell
-% gdb-multiarch -x ../debug.gdb blinky/bluepill_blinky.elf
+% make debug_session
 ```
 You should see the following:
 ![](png/gdb_session.png)

@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.11)
 
 project(bluepill_blinky C ASM)
 
+find_program(ST_FLASH NAMES st-flash)
+find_program(OPENOCD NAMES openocd)
+find_program(GDB NAMES gdb-multiarch)
+
 set(MCU_FAMILY STM32F1xx)
 set(MCU_LINE STM32F103xx)
 

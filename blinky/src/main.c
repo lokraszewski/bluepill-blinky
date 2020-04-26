@@ -13,7 +13,6 @@ void vBlinkTask(void *pvParameters) {
 
   for (;;) {
     HAL_GPIO_TogglePin(LED1_GPIO_PORT, LED1_PIN);
-    printf("hello world\n");
     vTaskDelay(delay);
   }
 }
