@@ -9,8 +9,7 @@ extern void initialise_monitor_handles(void);
 
 void vBlinkTask(void *pvParameters) {
 
-  const TickType_t delay = pdMS_TO_TICKS(1000);
-
+  const TickType_t delay = pdMS_TO_TICKS(500);
   for (;;) {
     HAL_GPIO_TogglePin(LED1_GPIO_PORT, LED1_PIN);
     vTaskDelay(delay);
@@ -22,7 +21,7 @@ void vSemiHostTask(void *pvParameters) {
   const TickType_t delay = pdMS_TO_TICKS(1000);
 
   for (;;) {
-    printf("hello world\n");
+    printf("hello world from %s\n", __func__);
     vTaskDelay(delay);
   }
 }
@@ -44,8 +43,10 @@ int main(void) {
     HAL_GPIO_Init(LED1_GPIO_PORT, &gpio);
   }
 
-  xTaskCreate(vBlinkTask, "task_blink", 1000, NULL, 1, NULL);
-  xTaskCreate(vSemiHostTask, "task_print", 1000, NULL, 1, NULL);
+  xTaskCreate(vSemiHostTask, "print", configMINIMAL_STACK_SIZE, (void *)2, 2,
+              NULL);
+  xTaskCreate(vBlinkTask, "blink", configMINIMAL_STACK_SIZE, (void *)1, 2,
+              NULL);
   vTaskStartScheduler();
 
   for (;;)

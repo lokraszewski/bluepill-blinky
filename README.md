@@ -8,6 +8,11 @@ cmake project for STM32F103 ["Bluepill"](https://stm32-base.org/boards/STM32F103
 
 ---
 
+## Clone
+
+```shell
+% git clone --recurse-submodules https://github.com/lokraszewski/bluepill-blinky                 
+```
 
 ## Configure & Build
 Create build directory and configure using cmake:
