@@ -21,7 +21,8 @@ add_executable(
 target_compile_definitions(${PROJECT_NAME}.elf
                            PUBLIC ${MCU_LINE} USE_HAL_LIBRARY STM32F103xB)
 
-add_link_options('--specs=rdimon.specs -lc -lrdimon')
+target_compile_options(${PROJECT_NAME}.elf PRIVATE --specs=rdimon.specs)
+target_link_options(${PROJECT_NAME}.elf PRIVATE -lc -lrdimon)
 
 target_include_directories(
   ${PROJECT_NAME}.elf

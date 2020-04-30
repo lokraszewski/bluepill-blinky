@@ -8,10 +8,16 @@ cmake project for STM32F103 ["Bluepill"](https://stm32-base.org/boards/STM32F103
 
 ---
 
+## Dependancies 
+
+```shell
+sudo apt-get install -y cmake gcc-arm-none-eabi openocd
+```
+
 ## Clone
 
 ```shell
-% git clone --recurse-submodules https://github.com/lokraszewski/bluepill-blinky                 
+% git clone --recursive https://github.com/lokraszewski/bluepill-blinky    
 ```
 
 ## Configure & Build
