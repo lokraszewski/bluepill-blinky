@@ -20,7 +20,7 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f1xx_it.h"
+#include "main.h"
 #include "FreeRTOS.h"
 #include "portable.h"
 #include "stm32f1xx_hal.h"
@@ -110,39 +110,9 @@ void UsageFault_Handler(void) {
 void DebugMon_Handler(void) {}
 
 /**
- * @brief  This function handles PendSVC exception.
- * @param  None
- * @retval None
+ * @brief This function handles TIM2 global interrupt.
  */
-// void PendSV_Handler(void) {}
-
-/**
- * @brief  This function handles SysTick Handler.
- * @param  None
- * @retval None
- */
-
-/******************************************************************************/
-/*                 STM32F1xx Peripherals Interrupt Handlers                   */
-/*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
-/*  available peripheral interrupt handler's name please refer to the startup */
-/*  file (startup_stm32f1xx.s).                                               */
-/******************************************************************************/
-/**
- * @brief  This function handles PPP interrupt request.
- * @param  None
- * @retval None
- */
-/*void PPP_IRQHandler(void)
-{
-}*/
-
-/**
- * @}
- */
-
-/**
- * @}
- */
+extern TIM_HandleTypeDef htim2;
+void TIM2_IRQHandler(void) { HAL_TIM_IRQHandler(&htim2); }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

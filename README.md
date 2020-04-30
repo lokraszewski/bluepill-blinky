@@ -11,20 +11,20 @@ cmake project for STM32F103 ["Bluepill"](https://stm32-base.org/boards/STM32F103
 ## Dependancies 
 
 ```shell
-sudo apt-get install -y cmake gcc-arm-none-eabi openocd
+sudo apt-get install -y cmake gcc-arm-none-eabi openocd cmake
 ```
 
 ## Clone
 
 ```shell
-% git clone --recursive https://github.com/lokraszewski/bluepill-blinky    
+% git clone --recursive git@github.com:lokraszewski/bluepill-blinky.git
 ```
 
 ## Configure & Build
 Create build directory and configure using cmake:
 ```shell
-% mkdir build && cd $_    
-% cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain/stm32f103.cmake -DCMAKE_BUILD_TYPE=Debug  
+% mkdir build && cd $_
+% cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain/stm32f103.cmake -DCMAKE_BUILD_TYPE=Debug
 ```
 The build type is optional here, we use it in the example for Debug session. Build:
 ```shell

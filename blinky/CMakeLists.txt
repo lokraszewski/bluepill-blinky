@@ -10,6 +10,8 @@ add_executable(
   ${PROJECT_NAME}.elf
   src/main.c
   src/stm32f1xx_it.c
+  src/stm32f1xx_hal_msp.c
+  src/stm32f1xx_hal_timebase_tim.c
   ${cube_path}/Drivers/CMSIS/Device/ST/${MCU_FAMILY}/Source/Templates/system_stm32f1xx.c
   ${cube_path}/Drivers/CMSIS/Device/ST/${MCU_FAMILY}/Source/Templates/gcc/startup_stm32f103xb.s
   ${hal_sources}
